@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>検索結果</h1>
+
+
+{% if books %}
+<div class="col-md-9">
+    {% for book in books %}
+        {% if forloop.counter0|divisibleby:3 %}
+            <div class="row">
+        {% endif %}
+        <div class="col-md-4 my-3">
+            <div class="card">
+                <img src="{{ book.thumbnail.url }}" class="card-img-top" alt="{{ book.title }}">
+                <div class="card-body">
+                    <h5 class="card-title">{{ book.title }}</h5>
+                    <p>カテゴリ: {{ book.category_disp }}</p>
+                    <p class="card-text"><small class="text-muted">投稿ユーザー: {{ book.user.username }}</small></p>
+                    <a href="{% url 'detail-book' book.pk %}" class="btn btn-primary">詳細へ</a>
+                </div>
+            </div>
+        </div>
+        {% if forloop.counter|divisibleby:3 or forloop.last %}
+            </div>
+        {% endif %}
+    {% endfor %}
+</div>
+{% else %}
+<p>検索結果はありません。</p>
+{% endif %}
+{% endblock %}
