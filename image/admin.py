@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Book, Review
+from .models import Image, Review
 
-admin.site.register(Book)
+admin.site.register(Image)
 admin.site.register(Review)

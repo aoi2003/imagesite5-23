@@ -31,7 +31,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'accounts.apps.AccountsConfig',
-    'book.apps.BookConfig',
+    'image.apps.ImageConfig',  # 変更
     'debug_toolbar',
 ]
 

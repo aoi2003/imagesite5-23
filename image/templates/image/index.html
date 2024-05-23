@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block title %}画像投稿サイト{% endblock %}
+
+{% block h1 %}画像投稿サイトにようこそ{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col-md-9">
+      {% for item in object_list %}
+        {% if forloop.counter0|divisibleby:3 %}
+          <div class="row">
+        {% endif %}
+        <div class="col-md-4 my-3">
+          <div class="card">
+            <img src="{{ item.thumbnail.url }}" class="card-img-top" alt="{{ item.title }}">
+            <div class="card-body">
+              <h5 class="card-title">{{ item.title }}</h5>
+              <p>カテゴリ:
+                {% if item.category == 'kawaii' %}
+                  かわいい
+                {% elif item.category == 'cool' %}
+                  かっこいい
+                {% else %}
+                  その他
+                {% endif %}
+              </p>
+              <p class="card-text" style="text-align: left;"></p>
+              <a href="{% url 'detail-image' item.pk %}" class="btn btn-primary">詳細へ</a>
+            </div>
+          </div>
+        </div>
+        {% if forloop.counter|divisibleby:3 or forloop.last %}
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+    <div class="col-md-3 my-3">
+      <h2 class="mb-4">評価順</h2>
+      {% for ranking_image in page_obj %}
+        <div class="card top-ranking-card">
+          <img src="{{ ranking_image.thumbnail.url }}" class="card-img-top" alt="{{ ranking_image.title }}">
+          <div class="card-body">
+            <h5 class="card-title">{{ ranking_image.title }}</h5>
+            <p class="card-text">評価：{{ ranking_image.avg_rating|floatformat:2 }}点</p>
+            <a href="{% url 'detail-image' ranking_image.pk %}" class="btn btn-primary">詳細へ</a>
+          </div>
+        </div>
+      {% endfor %}
+      {% include 'image/components/pagination.html' %}
+    </div>
+  </div>
+</div>
+{% endblock %}

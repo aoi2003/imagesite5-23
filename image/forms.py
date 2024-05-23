@@ -1,9 +1,9 @@
 from django import forms
-from .models import Book
+from .models import Image,Review
 
 class CreateForm(forms.ModelForm):
     class Meta:
-        model = Book
+        model = Image
         fields = ('title', 'text', 'category', 'thumbnail')
         labels = {
             'title': 'タイトル',
@@ -11,3 +11,8 @@ class CreateForm(forms.ModelForm):
             'category': 'カテゴリ',
             'thumbnail': 'サムネイル画像',
         }
+
+class ReviewForm(forms.ModelForm):
+    class Meta:
+        model = Review
+        fields = ['rate', 'text']
