@@ -24,7 +24,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    #'django.contrib.admin',
+    'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'accounts.apps.AccountsConfig',
     'book.apps.BookConfig',
+    'debug_toolbar',
 ]
 
 MIDDLEWARE = [
@@ -42,6 +43,10 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
+]
+INTERNAL_IPS = [
+    '127.0.0.1',
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -114,7 +119,15 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-STATIC_ROOT = BASE_DIR / 'static'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+#STATIC_ROOT = BASE_DIR / 'static'
+
+# プロジェクトルートの static ディレクトリに配置されたファイルを読み込むように設定
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+]
+
 
 MEDIA_URL = '/media/'
 
@@ -127,4 +140,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_REDIRECT_URL = 'index'
 
-LOGOUT_REDIRECT_URL = 'index'
+LOGOUT_REDIRECT_URL = '/'
+
+AUTH_USER_MODEL = 'accounts.CustomUser'

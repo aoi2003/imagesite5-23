@@ -1,7 +1,8 @@
-{% extends 'base.html' %} 
-{% load static %} 
-{% block title %}画像投稿サイト{% endblock %} 
-{% block h1 %}画像投稿サイトにようこそ{% endblock %} 
+{% extends 'base.html' %}
+
+{% block title %}画像投稿サイト{% endblock %}
+{% block h1 %}画像投稿サイトにようこそ{% endblock %}
+
 {% block content %}
 <div class="container">
     <div class="row">
@@ -15,8 +16,20 @@
                         <img src="{{ item.thumbnail.url }}" class="card-img-top" alt="{{ item.title }}">
                         <div class="card-body">
                             <h5 class="card-title">{{ item.title }}</h5>
-                            <p>カテゴリ: {{ item.category_disp }}</p>
-                            <p class="card-text"><small class="text-muted">投稿ユーザー： {{ item.user }}</small></p>
+                            
+                            <p>カテゴリ: 
+                                {% if item.category == 'kawaii' %}
+                                    かわいい
+                                {% elif item.category == 'cool' %}
+                                    かっこいい
+                                {% else %}
+                                    その他
+                                {% endif %}
+                            </p>
+                            <p class="card-text" style="text-align: left;">
+
+                            </p>
+                            
                             <a href="{% url 'detail-book' item.pk %}" class="btn btn-primary">詳細へ</a>
                         </div>
                     </div>

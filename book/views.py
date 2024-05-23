@@ -1,21 +1,19 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin  #ログインしていないユーザーを特定のページにリダイレクトするという仕様を簡単に実装できるようになる。
 from django.core.exceptions import PermissionDenied
 from django.core.paginator import Paginator
-from django.db.models import Avg
-from django.shortcuts import render
+from django.db.models import Avg, Q #Djangoではfilter()でDBのレコードを検索することができます。
+#その時にOR検索や否定条件を指定したい時があります。そういう時はQオブジェクトを使うと簡単にできます。
+from django.shortcuts import render, get_object_or_404
 from django.urls import reverse, reverse_lazy
-from django.views.generic import (
-    ListView,
-    DetailView,
-    CreateView,
-    DeleteView,
-    UpdateView,
-)
+from django.views.generic import ListView, DetailView, CreateView, DeleteView, UpdateView
 from django import forms
-from django.db.models import Q
+from django.http import JsonResponse
+from django.views.decorators.http import require_POST
+from django.contrib.auth.decorators import login_required
+from .models import Book, Like, Review
 from .forms import CreateForm
 from .consts import ITEM_PER_PAGE
-from .models import Book, Review
+
 
 CATEGORY_DICT = {
     'kawaii': 'かわいい',
@@ -90,18 +88,15 @@ class UpdateBookView(LoginRequiredMixin, UpdateView):
     def get_success_url(self):
         return reverse('detail-book', kwargs={'pk': self.object.id})
 
-
 def index_view(request):
     object_list = Book.objects.order_by('-id')
     ranking_list = Book.objects.annotate(avg_rating=Avg('review__rate')).order_by('-avg_rating')
-    for book in object_list:
-        book.category_disp = CATEGORY_DICT.get(book.category, book.category)
-    for book in ranking_list:
-        book.category_disp = CATEGORY_DICT.get(book.category, book.category)
 
+    user = request.user
     paginator = Paginator(ranking_list, ITEM_PER_PAGE)
     page_number = request.GET.get('page', 1)
     page_obj = paginator.page(page_number)
+
     return render(
         request,
         'book/index.html',
@@ -109,7 +104,7 @@ def index_view(request):
             'object_list': object_list,
             'ranking_list': ranking_list,
             'page_obj': page_obj,
-            'user': request.user, 
+            'user': request.user,
         }
     )
 
@@ -123,13 +118,10 @@ class CreateReviewView(LoginRequiredMixin, CreateView):
         context = super().get_context_data(**kwargs)
         context['book'] = Book.objects.get(pk=self.kwargs['book_id'])
         return context
-
     def form_valid(self, form):
         form.instance.user = self.request.user
+        form.instance.book_id = self.kwargs['book_id']  # この行を追加
         return super().form_valid(form)
-
-    def get_success_url(self):
-        return reverse('detail-book', kwargs={'pk': self.object.book.id})
 
 
 
@@ -141,10 +133,12 @@ def search_view(request):
         # タイトルまたは説明に検索ワードが含まれる場合にフィルタリング
         books = books.filter(
             Q(title__icontains=query) | Q(text__icontains=query)
-        )
+        )   #Qオブジェクトを使うと、SQLのWHERE句に相当する条件を、Pythonのコード内で簡潔かつ読みやすく記述することができます。
+            #特に複数の条件を組み合わせる場合に便利です。
 
     context = {
         'books': books,
         'query': query,
     }
     return render(request, 'book/search.html', context)
+
