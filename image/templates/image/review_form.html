@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block title %}レビュー投稿{% endblock %}
+{% block h1 %}レビュー投稿{% endblock %}
+{% block content %}
+<form method="post" class="p-4 m-4 bg-light border border-success rounded form-group">
+    {% csrf_token %}
+    <!-- CSRFトークンの追加 -->
+
+    <div>
+        <img src="{{ image.thumbnail.url }}" alt="{{ image.title }}" class="img-fluid">
+        <!-- 'image' コンテキスト変数からサムネイルとタイトルを表示 -->
+    </div>
+
+    <label>コメント</label>
+    <textarea class="form-control" name="text" rows="3">{{ form.text.value }}</textarea>
+    <!-- コメント入力フィールド -->
+
+    <label>評価</label>
+    <select class="form-control" name="rate">
+        <option value="0" {% if form.rate.value == "0" %}selected{% endif %}>0 (最低)</option>
+        <option value="1" {% if form.rate.value == "1" %}selected{% endif %}>1</option>
+        <option value="2" {% if form.rate.value == "2" %}selected{% endif %}>2</option>
+        <option value="3" {% if form.rate.value == "3" %}selected{% endif %}>3 (普通)</option>
+        <option value="4" {% if form.rate.value == "4" %}selected{% endif %}>4</option>
+        <option value="5" {% if form.rate.value == "5" %}selected{% endif %}>5 (最高)</option>
+    </select>
+    <!-- 評価選択フィールド -->
+
+    <button type="submit" class="btn btn-success mt-4">投稿する</button>
+    <!-- 投稿ボタン -->
+</form>
+{% endblock %}

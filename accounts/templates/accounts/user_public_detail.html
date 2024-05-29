@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+<div class="container my-5">
+  <div class="row">
+    <div class="col-md-4 text-center">
+      <div class="card shadow-sm mb-4">
+        <div class="card-body">
+          {% if user.profile_pic %}
+            <img src="{{ user.profile_pic.url }}" alt="プロフィール画像" class="img-fluid rounded-circle shadow-lg">
+          {% else %}
+            <img src="{% static 'images/default_profile.png' %}" alt="デフォルトプロフィール画像" class="img-fluid rounded-circle shadow-lg">
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    <div class="col-md-8">
+      <div class="card shadow-sm mb-4">
+        <div class="card-body">
+          <h2 class="card-title">ユーザー名</h2>
+          <p class="card-text">{{ user.username }}</p>
+        </div>
+      </div>
+      <div class="card shadow-sm mb-4">
+        <div class="card-body">
+          <h2 class="card-title">Xアカウント</h2>
+          <p class="card-text">{{ user.email }}</p>
+        </div>
+      </div>
+      {% if user.bio %}
+        <div class="card shadow-sm mb-4">
+          <div class="card-body">
+            <h2 class="card-title">自己紹介</h2>
+            <p class="card-text">{{ user.bio }}</p>
+          </div>
+        </div>
+      {% endif %}
+      {% if user.location %}
+        <div class="card shadow-sm mb-4">
+          <div class="card-body">
+            <h2 class="card-title">住所</h2>
+            <p class="card-text">{{ user.location }}</p>
+          </div>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

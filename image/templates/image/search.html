@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>検索結果</h1>
+
+{% if images %}
+<div class="col-md-9">
+  {% for image in images %}
+    {% if forloop.counter0|divisibleby:3 %}
+      <div class="row">
+    {% endif %}
+
+    <div class="col-md-4 my-3">
+      <div class="card">
+        <img src="{{ image.thumbnail.url }}" class="card-img-top" alt="{{ image.title }}">
+        <div class="card-body">
+          <h5 class="card-title">{{ image.title }}</h5>
+          <p class="card-text">{{ image.text|truncatechars:100 }}</p>
+              <p class="mb-0">投稿ユーザー<a class="nav-link d-inline-block" href="{% url 'accounts:public_user_detail' image.user_id %}">{{ image.user }}</a></p>
+          <a href="{% url 'detail-image' image.pk %}" class="btn btn-primary">詳細へ</a>
+        </div>
+      </div>
+    </div>
+
+    {% if forloop.counter|divisibleby:3 or forloop.last %}
+      </div>
+    {% endif %}
+  {% endfor %}
+</div>
+{% else %}
+<p>検索結果はありません。</p>
+{% endif %}
+{% endblock %}

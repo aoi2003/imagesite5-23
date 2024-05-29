@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ object.title }} - 書籍詳細{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card mt-5">
+        <div class="card-body">
+          <h2 class="card-title text-center text-success">{{ object.title }}</h2>
+          
+          {% if object.thumbnail %}
+            <img src="{{ object.thumbnail.url }}" class="img-fluid" alt="{{ object.title }}">
+          {% endif %}
+          <hr>
+          <h4>投稿者コメント</h4>
+          <p class="card-text">{{ object.text }}</p>
+          <hr>
+          <h3 class="card-subtitle mb-3">コメント一覧</h3>
+          <div class="border p-4 mb-4">
+            {% for review in object.review_set.all %}
+              <div class="mb-4">
+                <span class="text-muted">投稿ユーザー: {{ review.user.username }}</span>
+                <p class="card-text">{{ review.text }}</p>
+                <div class="d-flex justify-content-between align-items-center">
+                  <span class="text-muted">評価: {{ review.rate }}</span>
+                </div>
+              </div>
+            {% empty %}
+              <p class="text-muted">まだコメントはありません。</p>
+            {% endfor %}
+          </div>
+          <div class="text-center">
+            <a href="{% url 'list-image' %}" class="btn btn-primary mx-2">一覧へ</a>
+            <a href="{% url 'review' object.pk %}" class="btn btn-primary mx-2">コメントする</a>
+            <a href="{% url 'update-image' object.pk %}" class="btn btn-primary mx-2">編集する</a>
+            <a href="{% url 'delete-image' object.pk %}" class="btn btn-primary mx-2">削除する</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
