@@ -17,9 +17,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = [' https://imagesite-eb13f044d4df.herokuapp.com/']
 
 
 # Application definition
@@ -74,11 +74,10 @@ ASGI_APPLICATION = 'config.asgi.application'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 DATABASES = {
-        'default': dj_database_url.config(
-        # Replace this value with your local database's connection string.
-        default='postgres://mysitedb_o33d_user:5CPHCDv7thvXx39WjDrJeTKe4NvPtBYn@dpg-cpc16ocf7o1s7387so6g-a/mysitedb_o33d',
-        conn_max_age=600
-    )
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
 }
 
 
@@ -145,7 +144,7 @@ LOGOUT_REDIRECT_URL = '/'
 
 AUTH_USER_MODEL = 'accounts.CustomUser'
 
-PORT = 8000  # 任意のポート番号を指定
+
 
 
 if not DEBUG:
