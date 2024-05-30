@@ -32,7 +32,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'accounts.apps.AccountsConfig',
     'image.apps.ImageConfig',  # 変更
-    'debug_toolbar',
 ]
 
 MIDDLEWARE = [
